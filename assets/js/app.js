@@ -52,3 +52,48 @@ clearBtn.addEventListener('click', function() {
     logContainer.innerHTML = ''; 
     console.log("System logs successfully wiped.");
 });
+// --- MODULE 3: NUTRITION ENGINE ---
+const calculateBudgetBtn = document.getElementById('calculate-budget-btn');
+const budgetDisplay = document.getElementById('budget-display');
+// Check memory for a saved budget on page load
+const savedBudget = localStorage.getItem('ascension_budget');
+if (savedBudget !== null) {
+    budgetDisplay.textContent = `Daily Budget: ₹${savedBudget}`;
+    // Keep it red if you were over budget
+    if (Number(savedBudget) < 0) {
+        budgetDisplay.style.color = "#dc2626"; 
+    }
+}
+
+
+calculateBudgetBtn.addEventListener('click', function() {
+    // 1. Set the daily hostel budget
+    let dailyBudget = 60;
+    
+    // 2. Grab the numbers from all 4 cost inputs. 
+    // We use Number() to ensure JS treats it as math, not text.
+    const cost1 = Number(document.getElementById('meal-1-cost').value);
+    const cost2 = Number(document.getElementById('meal-2-cost').value);
+    const cost3 = Number(document.getElementById('meal-3-cost').value);
+    const cost4 = Number(document.getElementById('meal-4-cost').value);
+    
+    // 3. Calculate total spent
+    const totalSpent = cost1 + cost2 + cost3 + cost4;
+    
+    // 4. Calculate remaining budget
+    const remainingBudget = dailyBudget - totalSpent;
+    
+    // 5. Update the UI directly in the DOM
+    budgetDisplay.textContent = `Daily Budget: ₹${remainingBudget}`;
+    
+    // 6. Visual feedback: Turn text red if you go over budget!
+    if (remainingBudget < 0) {
+        budgetDisplay.style.color = "#dc2626"; 
+    } else {
+        budgetDisplay.style.color = "#22c55e"; 
+    }
+    // Save to browser memory
+    localStorage.setItem('ascension_budget', remainingBudget);
+    
+    console.log(`Meals logged. Total spent: ₹${totalSpent}. Remaining: ₹${remainingBudget}`);
+});
